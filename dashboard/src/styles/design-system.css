@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=DM+Serif+Display&display=swap');
+
+:root {
+  --void:        #0A0A0A;
+  --abyss:       #111113;
+  --slate:       #1A1A1F;
+  --ash:         #2A2A30;
+  --bone:        #E8E6E0;
+  --mist:        #9A9890;
+  --fog:         #4A4A54;
+  --signal:      #4A4AFF;
+  --signal-dim:  rgba(74,74,255,0.13);
+  --pending:     #FFB800;
+
+  --font-sans:   'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono:   'Geist Mono', 'JetBrains Mono', monospace;
+  --font-serif:  'DM Serif Display', Georgia, serif;
+
+  --space-1:  4px;  --space-2:  8px;  --space-3: 12px;
+  --space-4: 16px;  --space-5: 20px;  --space-6: 24px;
+  --space-8: 32px;  --space-10:40px;  --space-12:48px;
+  --space-16:64px;  --space-20:80px;  --space-24:96px;
+
+  --radius-sm: 4px;  --radius-md: 8px;
+  --radius-lg: 12px; --radius-xl: 16px;
+
+  --transition-instant: 100ms ease-out;
+  --transition-fast:    200ms ease-out;
+  --transition-base:    400ms ease-out;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+  background: var(--void);
+  color: var(--bone);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

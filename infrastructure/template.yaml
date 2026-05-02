@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: WARDEN - Trust layer for autonomous AI agents
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: python3.13
+    Environment:
+      Variables:
+        ENVIRONMENT: production
+        SECRETS_NAME: warden/prod/keys
+        DYNAMO_TABLE: warden-audit-log
+        AWS_REGION_NAME: eu-west-1
+
+Resources:
+  WardenAPI:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: warden-api
+      Handler: app.main.handler
+      CodeUri: ../backend/
+      Description: WARDEN API - FastAPI via Mangum
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: warden-audit-log
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+                - secretsmanager:DescribeSecret
+              Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:warden/*"
+            - Effect: Allow
+              Action:
+                - rds-data:ExecuteStatement
+                - rds-data:BatchExecuteStatement
+              Resource: "*"
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        HealthCheck:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: GET
+
+  WardenAuditLog:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: warden-audit-log
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: owner_did
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: owner_did
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+Outputs:
+  WardenApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+  WardenFunction:
+    Description: Lambda Function ARN
+    Value: !GetAtt WardenAPI.Arn
