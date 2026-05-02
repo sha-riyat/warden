@@ -12,7 +12,7 @@ Globals:
         ENVIRONMENT: production
         SECRETS_NAME: warden/prod/keys
         DYNAMO_TABLE: warden-audit-log
-        AWS_REGION_NAME: eu-west-1
+        AWS_REGION_NAME: us-east-1
 
 Resources:
   WardenAPI:
