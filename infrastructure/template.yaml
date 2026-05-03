@@ -13,6 +13,7 @@ Globals:
         SECRETS_NAME: warden/prod/keys
         DYNAMO_TABLE: warden-audit-log
         AWS_REGION_NAME: us-east-1
+        DATABASE_URL: "postgresql://warden:Youaremyspecial2024@warden-db.c8hsmemeqoc9.us-east-1.rds.amazonaws.com:5432/warden"
 
 Resources:
   WardenAPI:
