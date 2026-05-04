@@ -97,10 +97,11 @@ def verify(request: VerifyRequest, http_request: Request):
         return response_base
 
     except Exception as e:
-        response_base["reason"] = f"INTERNAL_ERROR"
+        response_base["reason"] = f"INTERNAL_ERROR: {str(e)}"
         return response_base
     finally:
         session.close()
+    return response_base
 
 
 def _write_audit_safe(owner_did, agent_did, action, credential_id=None, reason=None):
